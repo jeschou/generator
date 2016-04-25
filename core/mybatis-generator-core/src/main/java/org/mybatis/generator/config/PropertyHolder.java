@@ -15,8 +15,11 @@
  */
 package org.mybatis.generator.config;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -45,6 +48,28 @@ public abstract class PropertyHolder {
 
     public Properties getProperties() {
         return properties;
+    }
+    
+    // add by jessen
+    public String getProperty(String name, String default_) {
+        String v = properties.getProperty(name);
+        return v == null ? default_ : v;
+    }
+    
+    // add by jessen
+    public boolean getBooleanProperty(String name) {
+        return "true".equalsIgnoreCase(getProperty(name));
+    }
+    
+    // add by jessen
+    public List<String> getListProperty(String name){
+        String str=getProperty(name, "");
+        ArrayList<String> list = new ArrayList<>();
+        StringTokenizer st = new StringTokenizer(str, ", ");
+        while(st.hasMoreTokens())
+            list.add(st.nextToken());
+        return list;
+        
     }
 
     protected void addPropertyXmlElements(XmlElement xmlElement) {

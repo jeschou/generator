@@ -65,6 +65,31 @@ public class UpdateByPrimaryKeySelectiveElementGenerator extends
 
         for (IntrospectedColumn introspectedColumn : introspectedTable
                 .getNonPrimaryKeyColumns()) {
+            // add by jessen, remove created_by,creation_date when update，
+            String cn = introspectedColumn.getActualColumnName();
+            if(cn.equalsIgnoreCase("created_by")||cn.equalsIgnoreCase("creation_date"))
+                continue;
+            if(cn.equalsIgnoreCase("last_update_date")) {
+                sb.setLength(0);
+                sb.append(MyBatis3FormattingUtilities
+                        .getEscapedColumnName(introspectedColumn));
+                sb.append(" = "); //$NON-NLS-1$
+                sb.append("CURRENT_TIMESTAMP");
+                sb.append(',');
+                dynamicElement.addElement(new TextElement(sb.toString()));
+                continue;
+            }
+            if(cn.equalsIgnoreCase("object_version_number")) {
+                sb.setLength(0);
+                sb.append(MyBatis3FormattingUtilities
+                        .getEscapedColumnName(introspectedColumn));
+                sb.append(" = "); //$NON-NLS-1$
+                sb.append("OBJECT_VERSION_NUMBER + 1");
+                sb.append(',');
+                dynamicElement.addElement(new TextElement(sb.toString()));
+                continue;
+            }
+            
             XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
             sb.setLength(0);
             sb.append(introspectedColumn.getJavaProperty());

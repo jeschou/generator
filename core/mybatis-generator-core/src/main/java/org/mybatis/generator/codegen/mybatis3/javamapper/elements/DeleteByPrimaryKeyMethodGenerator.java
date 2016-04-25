@@ -54,7 +54,14 @@ public class DeleteByPrimaryKeyMethodGenerator extends
                     introspectedTable.getPrimaryKeyType());
             importedTypes.add(type);
             method.addParameter(new Parameter(type, "key")); //$NON-NLS-1$
-        } else {
+        }
+        // add by jessen, use dto to delete,when table has multilanguage support
+        else if(introspectedTable.tlTable!=null) {
+            FullyQualifiedJavaType type=new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+            importedTypes.add(type);
+            method.addParameter(new Parameter(type, "record"));
+        }
+        else {
             // no primary key class - fields are in the base class
             // if more than one PK field, then we need to annotate the
             // parameters

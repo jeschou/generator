@@ -77,6 +77,9 @@ public abstract class BaseRules implements Rules {
      * @return true if the element and method should be generated
      */
     public boolean generateInsertSelective() {
+        // add by jessen ,use property
+        if(introspectedTable.getContext().getBooleanProperty("ignore.insertSelective"))
+            return false;
         if (isModelOnly) {
             return false;
         }

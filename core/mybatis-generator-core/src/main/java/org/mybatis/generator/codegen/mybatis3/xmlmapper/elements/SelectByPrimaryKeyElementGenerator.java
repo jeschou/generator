@@ -88,6 +88,26 @@ public class SelectByPrimaryKeyElementGenerator extends
         sb.append("from "); //$NON-NLS-1$
         sb.append(introspectedTable
                 .getAliasedFullyQualifiedTableNameAtRuntime());
+        
+        // add by jessen,generate join tl
+        if (introspectedTable.tlTable != null) {
+            sb.append(" b");
+            answer.addElement(new TextElement(sb.toString()));
+            sb.setLength(0);
+            sb.append("LEFT OUTER JOIN ").append(
+                    introspectedTable.tlTable.getFullyQualifiedTable().getIntrospectedTableName()).append(" t");
+            answer.addElement(new TextElement(sb.toString()));
+            sb.setLength(0);
+            sb.append("    ON(");
+            for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
+                sb.append("b.").append(introspectedColumn.getActualColumnName()).append(" = ");
+                sb.append("t.").append(introspectedColumn.getActualColumnName()).append(" AND");
+                answer.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            sb.append("       t.LANG = #{request.locale,jdbcType=VARCHAR,javaType=java.lang.String})");
+        }
+        
         answer.addElement(new TextElement(sb.toString()));
 
         boolean and = false;

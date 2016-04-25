@@ -71,7 +71,8 @@ public class OutputUtilities {
      */
     public static void xmlIndent(StringBuilder sb, int indentLevel) {
         for (int i = 0; i < indentLevel; i++) {
-            sb.append("  "); //$NON-NLS-1$
+            // mod by jessen use 4 space to indent xml
+            sb.append("    "); //$NON-NLS-1$
         }
     }
 

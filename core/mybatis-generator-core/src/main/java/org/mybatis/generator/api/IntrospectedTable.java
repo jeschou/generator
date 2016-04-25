@@ -48,7 +48,8 @@ import org.mybatis.generator.internal.rules.Rules;
  * 
  */
 public abstract class IntrospectedTable {
-    
+    //add by jessen
+    public IntrospectedTable tlTable;
     /**
      * The Enum TargetRuntime.
      */

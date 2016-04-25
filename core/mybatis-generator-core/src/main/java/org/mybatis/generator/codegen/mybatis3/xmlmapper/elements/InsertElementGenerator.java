@@ -101,6 +101,15 @@ public class InsertElementGenerator extends AbstractXmlElementGenerator {
 
             insertClause.append(MyBatis3FormattingUtilities
                     .getEscapedColumnName(introspectedColumn));
+            
+            // add by jessen , insert creation_date,last_update_date with current_timestamp 
+            String cn = introspectedColumn.getActualColumnName();
+            if(cn.equalsIgnoreCase("creation_date") || cn.equalsIgnoreCase("last_update_date")) {
+                valuesClause.append("CURRENT_TIMESTAMP");
+            } else if(cn.equalsIgnoreCase("object_version_number")) {
+                valuesClause.append("1");
+            }
+            else
             valuesClause.append(MyBatis3FormattingUtilities
                     .getParameterClause(introspectedColumn));
             if (i + 1 < columns.size()) {

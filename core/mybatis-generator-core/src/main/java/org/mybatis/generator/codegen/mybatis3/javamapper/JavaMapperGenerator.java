@@ -89,6 +89,12 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
             interfaze.addImportedType(fqjt);
         }
         
+        // add by jessen ,add java doc for mapper interface
+        interfaze.addJavaDocLine("/**");
+        interfaze.addJavaDocLine(" *");
+        interfaze.addJavaDocLine(" * @author "+introspectedTable.getContext().getProperty("author"));
+        interfaze.addJavaDocLine(" */");
+        
         addCountByExampleMethod(interfaze);
         addDeleteByExampleMethod(interfaze);
         addDeleteByPrimaryKeyMethod(interfaze);

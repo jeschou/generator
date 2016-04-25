@@ -67,10 +67,23 @@ public class UpdateByPrimaryKeyWithoutBLOBsElementGenerator extends
         }
         while (iter.hasNext()) {
             IntrospectedColumn introspectedColumn = iter.next();
+            
+            // add be jessen, ignore created_by,creation_date when update
+            String cn = introspectedColumn.getActualColumnName();
+            if(cn.equalsIgnoreCase("created_by") || cn.equalsIgnoreCase("creation_date"))
+                continue;
 
             sb.append(MyBatis3FormattingUtilities
                     .getEscapedColumnName(introspectedColumn));
             sb.append(" = "); //$NON-NLS-1$
+            
+            // add by jessen, set last_update_date to current_timestamp
+            if(cn.equalsIgnoreCase("last_update_date")) {
+                sb.append("CURRENT_TIMESTAMP");
+            }else if(cn.equalsIgnoreCase("object_version_number")) {
+                sb.append("OBJECT_VERSION_NUMBER + 1");
+            }
+            else
             sb.append(MyBatis3FormattingUtilities
                     .getParameterClause(introspectedColumn));
 

@@ -61,6 +61,9 @@ public class BaseRecordGenerator extends AbstractJavaGenerator {
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);
+        
+        // add by jessen
+        commentGenerator.addClassComment(topLevelClass, introspectedTable);
 
         FullyQualifiedJavaType superClass = getSuperClass();
         if (superClass != null) {
@@ -79,10 +82,12 @@ public class BaseRecordGenerator extends AbstractJavaGenerator {
             }
         }
         
+        List<String> stdcolumns = context.getListProperty("std.columns");
         String rootClass = getRootClass();
         for (IntrospectedColumn introspectedColumn : introspectedColumns) {
             if (RootClassInfo.getInstance(rootClass, warnings)
-                    .containsProperty(introspectedColumn)) {
+                    .containsProperty(introspectedColumn)
+                    ||stdcolumns.contains(introspectedColumn.getActualColumnName().toUpperCase())) {
                 continue;
             }
 

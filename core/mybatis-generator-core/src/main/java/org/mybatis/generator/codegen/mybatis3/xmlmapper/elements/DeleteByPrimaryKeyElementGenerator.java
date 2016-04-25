@@ -55,6 +55,11 @@ public class DeleteByPrimaryKeyElementGenerator extends
                         .get(0).getFullyQualifiedJavaType().toString();
             }
         }
+        
+        // add by jessen,deleteByPrimaryKey use dto type as parameterType, when table has multilanguage support
+        if(introspectedTable.tlTable != null) {
+            answer.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
+        }else
         answer.addAttribute(new Attribute("parameterType", //$NON-NLS-1$
                 parameterClass));
 
